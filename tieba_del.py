@@ -48,7 +48,7 @@ def extract_post_path():
 def parse_q(url):
     p = parse.urlparse(url)
     q = parse.parse_qs(p.query)
-    return p.path[3:13], q['fid'][0], p.fragment
+    return p.path[3:13], q.get('fid', 0), p.fragment
 
 
 def del_t():
@@ -65,15 +65,16 @@ def main():
         body['tid'] = a[0]
         body['pid'] = a[2]
         r = del_t()
+        print('delete begin', end=' ', flush=True)
         if r['no'] != 0:
+            print()
             print(r)
             break
+        print(' . ', end=' ', flush=True)
         if i != _l:
-            time.sleep(1)
-        if i == 1:
-            print('delete begin', end=' ', flush=True)
+            time.sleep(0.5)
         else:
-            print(' . ', end=' ', flush=True)
+            print('end')
 
 
 if __name__ == '__main__':
