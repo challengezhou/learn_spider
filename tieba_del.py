@@ -59,13 +59,13 @@ def del_t():
 def main():
     post_path = extract_post_path()
     _l = len(post_path)
+    print('delete begin', end=' ', flush=True)
     for i, post_redirect_path in enumerate(post_path, start=1):
         a = parse_q(post_redirect_path)
         body['fid'] = a[1]
         body['tid'] = a[0]
         body['pid'] = a[2]
         r = del_t()
-        print('delete begin', end=' ', flush=True)
         if r['no'] != 0:
             print()
             print(r)
