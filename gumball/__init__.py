@@ -33,3 +33,8 @@ def simple_content(content):
         a_l = _l.replace('\n', ' ')
         _lines.append(a_l)
     return _lines
+
+if __name__ == '__main__':
+    for _url, _name, _score in reward_post():
+        _content = detect_content(_url)
+        print(_url, _name, _score, 'contains' if _content.count('截图') else '')

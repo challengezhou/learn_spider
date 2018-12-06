@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from ..gumball import reward_post, detect_content
+from gumball import reward_post, detect_content
 import json
 
 app = Flask(__name__)
@@ -15,5 +15,5 @@ def home():
     return render_template('./home.html', data=_s)
 
 
-if __name__ == '__main__':
+def run():
     app.run()
