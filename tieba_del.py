@@ -20,5 +20,5 @@ if __name__ == '__main__':
             count += 1
             if i != _l:
                 time.sleep(0.5)
-    print('end')
-    print('%s replies deleted' % count)
+    print('')
+    print('end; %s replies deleted' % count)
