@@ -22,8 +22,9 @@ def reward_post():
 def detect_content(thread_url):
     c_xpath = '//td[contains(@id, "postmessage_")]'
     post_content = extract_content(thread_url, c_xpath)
-    _content = post_content[0].xpath('string(.)')
-    return _content
+    if 0 != len(post_content):
+        _content = post_content[0].xpath('string(.)')
+        return _content
 
 
 def simple_content(content):
@@ -34,7 +35,17 @@ def simple_content(content):
         _lines.append(a_l)
     return _lines
 
-if __name__ == '__main__':
+
+def generate_list():
     for _url, _name, _score in reward_post():
-        _content = detect_content(_url)
-        print(_url, _name, _score, 'contains' if _content.count('截图') else '')
+        if '寻宝任务' not in _name:
+            _content = detect_content(_url)
+            if _content:
+                yield _url, _name, _score, 'contains' if '截图' in _content else 'no'
+        else:
+            yield _url, _name, _score, 'unknown'
+
+
+if __name__ == '__main__':
+    for url, name, score, contains in generate_list():
+        print(url, name, score, contains)
