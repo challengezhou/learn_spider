@@ -2,10 +2,14 @@ from html_parser import extract_content
 
 _u_wendao = 'http://bbs.leiting.com/forum-124-1.html'
 _u_gumball = 'http://bbs.leiting.com/forum-288-1.html'
+# 又要截图，又要id的~~
 _u_dibao = 'http://bbs.leiting.com/forum-154-1.html'
 _u_dongku = 'http://bbs.leiting.com/forum-166-1.html'
 
-l_url = (_u_wendao, _u_gumball, _u_dibao, _u_dongku)
+l_url = (_u_wendao,
+         _u_gumball,
+         # _u_dibao,
+         _u_dongku)
 
 
 def reward_post():
