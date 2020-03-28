@@ -2,6 +2,7 @@
 .idea/
 target/
 .DS_Store
+.vscode/
 # Log file
 *.log
 
