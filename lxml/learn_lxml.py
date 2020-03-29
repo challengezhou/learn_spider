@@ -4,9 +4,9 @@ import os
 base_url = 'https://www.51voa.com/'
 
 datas = []
-info = {}
 
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'test.html')) as f:
+
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'new-pearl-jam-album-heavy-on-climate-activism-84192.html'), encoding='utf-8') as f:
     str = f.read()
     selector = etree.HTML(str)
 
@@ -18,11 +18,14 @@ def print_text(x):
 
 if __name__ == '__main__':
     # if use etree.HTML default add /html/body
-    lis = selector.xpath('//*[@id="Right_Content"]/div[3]/ul/li')
-    for li in lis:
-        categroy = li.xpath('a[1]/text()')
-        title = li.xpath('a[last()]/text()')
-        href = li.xpath('a[last()]/@href')
-        info.
-        print('%s%s\nhref: %s' % (categroy[0], title[0], href[0]))
-    
+    # lis = selector.xpath('//*[@id="Right_Content"]/div[3]/ul/li')
+    # for li in lis:
+    #     categroy = li.xpath('a[1]/text()')
+    #     title = li.xpath('a[last()]/text()')
+    #     href = li.xpath('a[last()]/@href')
+    #     info = {}
+    #     info['categroy'] = categroy
+    #     info['href'] = href
+    #     info['title'] = title
+    #     print(info)
+    ps = selector.xpath('//*[@id="Right_Content"]/div[@class="Content"]')
