@@ -15,6 +15,9 @@ def print_text(x):
     for t in x:
         print(t.text)
 
+# xpath list
+# title //*[@id="Right_Content"]/div[@class=title]
+# content //*[@id="Right_Content"]/div[@class="Content"]
 
 if __name__ == '__main__':
     # if use etree.HTML default add /html/body
@@ -28,4 +31,9 @@ if __name__ == '__main__':
     #     info['href'] = href
     #     info['title'] = title
     #     print(info)
-    ps = selector.xpath('//*[@id="Right_Content"]/div[@class="Content"]')
+    title = selector.xpath('//*[@id="Right_Content"]/div[@class="title"]')
+    print(title[0].xpath('string()'))
+    content = selector.xpath('//*[@id="Right_Content"]/div[@class="Content"]/p')
+    for p in content:
+        print(p.xpath('string()'))
+        print()

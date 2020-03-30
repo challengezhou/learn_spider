@@ -5,7 +5,7 @@ target/
 .vscode/
 # Log file
 *.log
-
+*.mp3
 
 
 # BlueJ files
