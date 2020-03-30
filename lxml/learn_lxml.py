@@ -35,5 +35,5 @@ if __name__ == '__main__':
     print(title[0].xpath('string()'))
     content = selector.xpath('//*[@id="Right_Content"]/div[@class="Content"]/p')
     for p in content:
-        print(p.xpath('string()'))
+        print(p.xpath('/string(.)'))
         print()
