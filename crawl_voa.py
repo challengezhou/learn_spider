@@ -1,29 +1,20 @@
 #!/usr/bin/env python3
 
-
 from lxml import etree
 import req
 import os
 
-
-# xpath //*[@id="Right_Content"]/div[3]/ul/li
-# <li><a href="/Technology_Report_1.html" target="_blank">[ Technology Report ] </a>  <a href="/VOA_Special_English/top-video-calling-apps-for-learning-work-and-social-connections-84179.html" target="_blank">Top Video Calling Apps for Learning, Work, Social Connections  (2020/3/26)</a></li>
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"}
 domain = 'https://www.51voa.com'
 
 
-def get_content():
-    url = 'https://www.51voa.com/Technology_Report_9.html'
-    resp = req.get(url, headers=headers)
-    return resp
-
-
-# prepare the document info which have translation and lyric
-def prepareLink():
-    htmlStr = get_content().text
-    selector = etree.HTML(htmlStr)
+# prepare the document info which have translations and lyrics
+def prepareInfo(url):
+    r = req.get(url, headers=headers)
+    html_str = r.text
+    selector = etree.HTML(html_str)
     lis = selector.xpath('//*[@id="Right_Content"]/div[3]/ul/li')
     datas = []
     for li in lis:
@@ -60,25 +51,49 @@ def extract_content(selector):
         lines.append(line)
     return lines
 
-if __name__ == "__main__":
-    location = 'D:\\download\\voa'
-    datas = prepareLink()
+
+# extract mp3 and lyric download url
+def extract_download_link(selector):
+    links = []
+    mp3 = selector.xpath('//*[@id="mp3"]/@href')[0]
+    lrc = selector.xpath('//*[@id="lrc"]/@href')[0]
+    lrc = domain + lrc
+    links.append(mp3)
+    links.append(lrc)
+    return links
+
+
+def write_content(file_path, lines):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        for line in lines:
+            f.write(line)
+            f.write('\n\n')
+
+
+def crawl(url, save_path):
+    datas = prepareInfo(url)
     for info in datas:
-        main_title = info['title']
         # english page href
         en_url = info['href']
         translation_url = en_url[:len(en_url)-5] + '_1.html'
+        # jump to content page
         r = req.get(url=domain+en_url, headers=headers)
         en_content = r.text
         selector = etree.HTML(en_content)
         lines = extract_content(selector)
-        lines.append('en_url:{:s}\ntranslation_url:{:s}'.format(en_url, translation_url))
-        mp3 = selector.xpath('//*[@id="mp3"]/@href')[0]
-        lrc = selector.xpath('//*[@id="lrc"]/@href')[0]
-        req.download(mp3, headers=headers, location=location)
-        req.download(domain + lrc, headers=headers, location=location)
-        txt_file = os.path.join(location, mp3.rsplit('/', 1)[1][:-4] + '.txt')
-        with open(txt_file, 'w', encoding='utf-8') as f:
-            for line in lines:
-                f.write(line)
-                f.write('\n\n')
+        # append refer url
+        lines.append('en_url:{:s}\ntranslation_url:{:s}'.format(
+            en_url, translation_url))
+        download_links = extract_download_link(selector)
+        for link in download_links:
+            req.download(link, headers=headers, location=save_path)
+        txt_file_path = os.path.join(
+            save_path, download_links[0].rsplit('/', 1)[1][:-4] + '.txt')
+        write_content(txt_file_path, lines)
+
+
+if __name__ == "__main__":
+    save_path = '/Users/zhoujian/Downloads/voa'
+    for i in range(3, 10):
+        url = 'https://www.51voa.com/Technology_Report_%d.html' % i
+        crawl(url, save_path)
